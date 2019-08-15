@@ -1,4 +1,4 @@
-# OpenAPI Generator for the HaxeCodegen library
+# OpenAPI Generator for the HaxeClientCodegen library
 
 ## Overview
 This is a boiler-plate project to generate your own project derived from an OpenAPI specification.
@@ -22,9 +22,9 @@ At this point, you've likely generated a client setup.  It will include somethin
 |-- src
 |--- main
 |---- java
-|----- com.haxe.codegen.HaxecodegenGenerator.java // generator file
+|----- com.java.codegen.HaxeclientcodegenGenerator.java // generator file
 |---- resources
-|----- HaxeCodegen // template files
+|----- HaxeClientCodegen // template files
 |----- META-INF
 |------ services
 |------- org.openapitools.codegen.CodegenConfig
@@ -32,11 +32,11 @@ At this point, you've likely generated a client setup.  It will include somethin
 
 You _will_ need to make changes in at least the following:
 
-`HaxecodegenGenerator.java`
+`HaxeclientcodegenGenerator.java`
 
 Templates in this folder:
 
-`src/main/resources/HaxeCodegen`
+`src/main/resources/HaxeClientCodegen`
 
 Once modified, you can run this:
 
@@ -48,23 +48,23 @@ In your generator project. A single jar file will be produced in `target`. You c
 
 For mac/linux:
 ```
-java -cp /path/to/openapi-generator-cli.jar:/path/to/your.jar org.openapitools.codegen.OpenAPIGenerator generate -g HaxeCodegen -i /path/to/openapi.yaml -o ./test
+java -cp /path/to/openapi-generator-cli.jar:/path/to/your.jar org.openapitools.codegen.OpenAPIGenerator generate -g HaxeClientCodegen -i /path/to/openapi.yaml -o ./test
 ```
 (Do not forget to replace the values `/path/to/openapi-generator-cli.jar`, `/path/to/your.jar` and `/path/to/openapi.yaml` in the previous command)
 
 For Windows users, you will need to use `;` instead of `:` in the classpath, e.g.
 ```
-java -cp /path/to/openapi-generator-cli.jar;/path/to/your.jar org.openapitools.codegen.OpenAPIGenerator generate -g HaxeCodegen -i /path/to/openapi.yaml -o ./test
+java -cp /path/to/openapi-generator-cli.jar;/path/to/your.jar org.openapitools.codegen.OpenAPIGenerator generate -g HaxeClientCodegen -i /path/to/openapi.yaml -o ./test
 ```
 
 Now your templates are available to the client generator and you can write output values
 
 ## But how do I modify this?
-The `HaxecodegenGenerator.java` has comments in it--lots of comments.  There is no good substitute
-for reading the code more, though.  See how the `HaxecodegenGenerator` implements `CodegenConfig`.
+The `HaxeclientcodegenGenerator.java` has comments in it--lots of comments.  There is no good substitute
+for reading the code more, though.  See how the `HaxeclientcodegenGenerator` implements `CodegenConfig`.
 That class has the signature of all values that can be overridden.
 
-You can also step through HaxecodegenGenerator.java in a debugger.  Just debug the JUnit
+You can also step through HaxeclientcodegenGenerator.java in a debugger.  Just debug the JUnit
 test in DebugCodegenLauncher.  That runs the command line tool and lets you inspect what the code is doing.  
 
 For the templates themselves, you have a number of values available to you for generation.
@@ -78,7 +78,7 @@ the object you have available during client generation:
 # -DdebugOperations prints operations passed to the template engine
 # -DdebugSupportingFiles prints additional data passed to the template engine
 
-java -DdebugOperations -cp /path/to/openapi-generator-cli.jar:/path/to/your.jar org.openapitools.codegen.OpenAPIGenerator generate -g HaxeCodegen -i /path/to/openapi.yaml -o ./test
+java -DdebugOperations -cp /path/to/openapi-generator-cli.jar:/path/to/your.jar org.openapitools.codegen.OpenAPIGenerator generate -g HaxeClientCodegen -i /path/to/openapi.yaml -o ./test
 ```
 
 Will, for example, output the debug info for operations.

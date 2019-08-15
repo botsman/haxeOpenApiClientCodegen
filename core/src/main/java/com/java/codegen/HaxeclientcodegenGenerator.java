@@ -1,4 +1,4 @@
-package com.haxe.codegen;
+package com.java.codegen;
 
 import org.openapitools.codegen.*;
 import io.swagger.models.properties.*;
@@ -6,7 +6,7 @@ import io.swagger.models.properties.*;
 import java.util.*;
 import java.io.File;
 
-public class HaxecodegenGenerator extends DefaultCodegen implements CodegenConfig {
+public class HaxeclientcodegenGenerator extends DefaultCodegen implements CodegenConfig {
 
   // source folder where to write the files
   protected String sourceFolder = "src";
@@ -29,7 +29,7 @@ public class HaxecodegenGenerator extends DefaultCodegen implements CodegenConfi
    * @return the friendly name for the generator
    */
   public String getName() {
-    return "HaxeCodegen";
+    return "HaxeClientCodegen";
   }
 
   /**
@@ -64,14 +64,14 @@ public class HaxecodegenGenerator extends DefaultCodegen implements CodegenConfi
    * @return A string value for the help message
    */
   public String getHelp() {
-    return "Generates a HaxeCodegen client library.";
+    return "Generates a HaxeClientCodegen client library.";
   }
 
-  public HaxecodegenGenerator() {
+  public HaxeclientcodegenGenerator() {
     super();
 
     // set the output folder here
-    outputFolder = "generated-code/HaxeCodegen";
+    outputFolder = "generated-code/HaxeClientCodegen";
 
     /**
      * Models.  You can write model files using the modelTemplateFiles map.
@@ -96,7 +96,7 @@ public class HaxecodegenGenerator extends DefaultCodegen implements CodegenConfi
      * Template Location.  This is the location which templates will be read from.  The generator
      * will use the resource stream to attempt to read the templates.
      */
-    templateDir = "HaxeCodegen";
+    templateDir = "HaxeClientCodegen";
 
     /**
      * Api Package.  Optional, if needed, this can be used in templates

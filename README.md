@@ -8,7 +8,7 @@ Advices/PRs on how to do something right or better much appreciated.
 
 ## Useful commands
 ### Project stub under `core` is generated using following command
-`openapi-generator-cli meta -o core/ -n HaxeCodegen -p com.haxe.codegen`
+`openapi-generator-cli meta -o core/ -n HaxeClientCodegen -p com.java.codegen`
 
 `openapi-generator-cli` must be in your PATH in order to execute this command. (See [OpenApi documentation](https://github.com/OpenAPITools/openapi-generator#launcher-script))
 
