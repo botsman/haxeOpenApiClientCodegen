@@ -6,7 +6,7 @@ import io.swagger.models.properties.*;
 import java.util.*;
 import java.io.File;
 
-public class HaxeclientcodegenGenerator extends DefaultCodegen implements CodegenConfig {
+public class HaxeClientCodegen extends DefaultCodegen implements CodegenConfig {
 
   // source folder where to write the files
   protected String sourceFolder = "src";
@@ -14,7 +14,7 @@ public class HaxeclientcodegenGenerator extends DefaultCodegen implements Codege
 
   /**
    * Configures the type of generator.
-   * 
+   *
    * @return  the CodegenType for this generator
    * @see     org.openapitools.codegen.CodegenType
    */
@@ -25,7 +25,7 @@ public class HaxeclientcodegenGenerator extends DefaultCodegen implements Codege
   /**
    * Configures a friendly name for the generator.  This will be used by the generator
    * to select the library with the -g flag.
-   * 
+   *
    * @return the friendly name for the generator
    */
   public String getName() {
@@ -60,14 +60,14 @@ public class HaxeclientcodegenGenerator extends DefaultCodegen implements Codege
   /**
    * Returns human-friendly help for the generator.  Provide the consumer with help
    * tips, parameters here
-   * 
+   *
    * @return A string value for the help message
    */
   public String getHelp() {
     return "Generates a HaxeClientCodegen client library.";
   }
 
-  public HaxeclientcodegenGenerator() {
+  public HaxeClientCodegen() {
     super();
 
     // set the output folder here
@@ -147,7 +147,7 @@ public class HaxeclientcodegenGenerator extends DefaultCodegen implements Codege
   /**
    * Escapes a reserved word as defined in the `reservedWords` array. Handle escaping
    * those terms here.  This logic is only called if a variable matches the reserved words
-   * 
+   *
    * @return the escaped term
    */
   @Override
