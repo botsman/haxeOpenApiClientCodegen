@@ -2,70 +2,18 @@ package com.java.codegen;
 
 import org.openapitools.codegen.*;
 import io.swagger.models.properties.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.io.File;
 
 public class HaxeClientCodegen extends DefaultCodegen implements CodegenConfig {
+  private static final Logger LOGGER = LoggerFactory.getLogger(HaxeClientCodegen.class);
 
   // source folder where to write the files
   protected String sourceFolder = "src";
   protected String apiVersion = "1.0.0";
-
-  /**
-   * Configures the type of generator.
-   *
-   * @return  the CodegenType for this generator
-   * @see     org.openapitools.codegen.CodegenType
-   */
-  public CodegenType getTag() {
-    return CodegenType.OTHER;
-  }
-
-  /**
-   * Configures a friendly name for the generator.  This will be used by the generator
-   * to select the library with the -g flag.
-   *
-   * @return the friendly name for the generator
-   */
-  public String getName() {
-    return "HaxeClientCodegen";
-  }
-
-  /**
-   * Provides an opportunity to inspect and modify operation data before the code is generated.
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public Map<String, Object> postProcessOperationsWithModels(Map<String, Object> objs, List<Object> allModels) {
-
-    // to try debugging your code generator:
-    // set a break point on the next line.
-    // then debug the JUnit test called LaunchGeneratorInDebugger
-
-    Map<String, Object> results = super.postProcessOperationsWithModels(objs, allModels);
-
-    Map<String, Object> ops = (Map<String, Object>)results.get("operations");
-    ArrayList<CodegenOperation> opList = (ArrayList<CodegenOperation>)ops.get("operation");
-
-    // iterate over the operation and perhaps modify something
-    for(CodegenOperation co : opList){
-      // example:
-      // co.httpMethod = co.httpMethod.toLowerCase();
-    }
-
-    return results;
-  }
-
-  /**
-   * Returns human-friendly help for the generator.  Provide the consumer with help
-   * tips, parameters here
-   *
-   * @return A string value for the help message
-   */
-  public String getHelp() {
-    return "Generates a HaxeClientCodegen client library.";
-  }
 
   public HaxeClientCodegen() {
     super();
@@ -145,6 +93,36 @@ public class HaxeClientCodegen extends DefaultCodegen implements CodegenConfig {
   }
 
   /**
+   * Configures the type of generator.
+   *
+   * @return  the CodegenType for this generator
+   * @see     org.openapitools.codegen.CodegenType
+   */
+  public CodegenType getTag() {
+    return CodegenType.CLIENT;
+  }
+
+  /**
+   * Configures a friendly name for the generator.  This will be used by the generator
+   * to select the library with the -g flag.
+   *
+   * @return the friendly name for the generator
+   */
+  public String getName() {
+    return "haxe";
+  }
+
+  /**
+   * Returns human-friendly help for the generator.  Provide the consumer with help
+   * tips, parameters here
+   *
+   * @return A string value for the help message
+   */
+  public String getHelp() {
+    return "Generates a Haxe client library.";
+  }
+
+  /**
    * Escapes a reserved word as defined in the `reservedWords` array. Handle escaping
    * those terms here.  This logic is only called if a variable matches the reserved words
    *
@@ -152,7 +130,35 @@ public class HaxeClientCodegen extends DefaultCodegen implements CodegenConfig {
    */
   @Override
   public String escapeReservedWord(String name) {
-    return "_" + name;  // add an underscore to the name
+    if (this.reservedWordsMappings().containsKey(name)) {
+      return this.reservedWordsMappings().get(name);
+    }
+    return "_" + name;
+  }
+
+  /**
+   * Provides an opportunity to inspect and modify operation data before the code is generated.
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public Map<String, Object> postProcessOperationsWithModels(Map<String, Object> objs, List<Object> allModels) {
+
+    // to try debugging your code generator:
+    // set a break point on the next line.
+    // then debug the JUnit test called LaunchGeneratorInDebugger
+
+    Map<String, Object> results = super.postProcessOperationsWithModels(objs, allModels);
+
+    Map<String, Object> ops = (Map<String, Object>)results.get("operations");
+    ArrayList<CodegenOperation> opList = (ArrayList<CodegenOperation>)ops.get("operation");
+
+    // iterate over the operation and perhaps modify something
+    for(CodegenOperation co : opList){
+      // example:
+      // co.httpMethod = co.httpMethod.toLowerCase();
+    }
+
+    return results;
   }
 
   /**
@@ -182,7 +188,7 @@ public class HaxeClientCodegen extends DefaultCodegen implements CodegenConfig {
   @Override
   public String escapeUnsafeCharacters(String input) {
     //TODO: check that this logic is safe to escape unsafe characters to avoid code injection
-    return input;
+    return input.replace("*/", "*_/").replace("/*", "/_*");
   }
 
   /**
@@ -193,6 +199,9 @@ public class HaxeClientCodegen extends DefaultCodegen implements CodegenConfig {
    */
   public String escapeQuotationMark(String input) {
     //TODO: check that this logic is safe to escape quotation mark to avoid code injection
+    if (input == null) {
+      return "";
+    }
     return input.replace("\"", "\\\"");
   }
 }
