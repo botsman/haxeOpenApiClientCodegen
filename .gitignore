@@ -27,3 +27,10 @@ build
 
 # maven
 */target/**
+
+# editors
+.idea
+.vscode
+
+# project related files
+core/.*
