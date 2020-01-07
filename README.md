@@ -8,12 +8,16 @@ Advices/PRs on how to do something right or better much appreciated.
 
 ## Useful commands
 ### Project stub under `core` is generated using following command
-`openapi-generator-cli meta -o core/ -n HaxeClientCodegen -p com.java.codegen`
+`openapi-generator-cli meta -o core/ -n haxe-client-codegen -p com.company.codegen`
 
 `openapi-generator-cli` must be in your PATH in order to execute this command. (See [OpenApi documentation](https://github.com/OpenAPITools/openapi-generator#launcher-script))
 
 See `README.md` inside `core/` to find additional useful commands
 
-
-This software is distrubuted on an "AS IS" basis,
-without warranties or conditions of any kind, either express or implied.
+To compile a source code from your codegen:
+```
+java -cp core/target/haxe-client-codegen-openapi-generator-1.0.0.jar:openapi-generator-cli-4.2.2.jar \
+    org.openapitools.codegen.OpenAPIGenerator generate -g haxe-client-codegen \
+    -i https://raw.githubusercontent.com/openapitools/openapi-generator/master/modules/openapi-generator/src/test/resources/2_0/petstore.yaml \
+    -o ./out/myClient
+```
