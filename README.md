@@ -19,5 +19,6 @@ To compile a source code from your codegen:
 java -cp core/target/haxe-client-codegen-openapi-generator-1.0.0.jar:openapi-generator-cli-4.2.2.jar \
     org.openapitools.codegen.OpenAPIGenerator generate -g haxe-client-codegen \
     -i https://raw.githubusercontent.com/openapitools/openapi-generator/master/modules/openapi-generator/src/test/resources/2_0/petstore.yaml \
-    -o ./out/myClient
+    -o ./out/myClient \
+    -c config.json
 ```
