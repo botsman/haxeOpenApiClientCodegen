@@ -19,7 +19,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
    * @see     org.openapitools.codegen.CodegenType
    */
   public CodegenType getTag() {
-    return CodegenType.OTHER;
+    return CodegenType.CLIENT;
   }
 
   /**
@@ -81,7 +81,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
      */
     modelTemplateFiles.put(
       "model.mustache", // the template to use
-      ".sample");       // the extension for each file to write
+      ".hx");       // the extension for each file to write
 
     /**
      * Api classes.  You can write classes for each Api file with the apiTemplateFiles map.
@@ -90,7 +90,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
      */
     apiTemplateFiles.put(
       "api.mustache",   // the template to use
-      ".sample");       // the extension for each file to write
+      ".hx");       // the extension for each file to write
 
     /**
      * Template Location.  This is the location which templates will be read from.  The generator
@@ -139,8 +139,11 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
      */
     languageSpecificPrimitives = new HashSet<String>(
       Arrays.asList(
-        "Type1",      // replace these with your types
-        "Type2")
+        "String",
+        "Bool",
+        "Null",
+        "Int",
+        "Float")
     );
   }
 
