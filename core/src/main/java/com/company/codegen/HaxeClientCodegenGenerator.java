@@ -14,7 +14,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
 
   /**
    * Configures the type of generator.
-   * 
+   *
    * @return  the CodegenType for this generator
    * @see     org.openapitools.codegen.CodegenType
    */
@@ -25,7 +25,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
   /**
    * Configures a friendly name for the generator.  This will be used by the generator
    * to select the library with the -g flag.
-   * 
+   *
    * @return the friendly name for the generator
    */
   public String getName() {
@@ -60,7 +60,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
   /**
    * Returns human-friendly help for the generator.  Provide the consumer with help
    * tips, parameters here
-   * 
+   *
    * @return A string value for the help message
    */
   public String getHelp() {
@@ -69,133 +69,71 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
 
   public HaxeClientCodegenGenerator() {
     super();
-
-    // set the output folder here
     outputFolder = "generated-code/haxe-client-codegen";
-
-    /**
-     * Models.  You can write model files using the modelTemplateFiles map.
-     * if you want to create one template for file, you can do so here.
-     * for multiple files for model, just put another entry in the `modelTemplateFiles` with
-     * a different extension
-     */
-    modelTemplateFiles.put(
-      "model.mustache", // the template to use
-      ".hx");       // the extension for each file to write
-
-    /**
-     * Api classes.  You can write classes for each Api file with the apiTemplateFiles map.
-     * as with models, add multiple entries with different extensions for multiple files per
-     * class
-     */
-    apiTemplateFiles.put(
-      "api.mustache",   // the template to use
-      ".hx");       // the extension for each file to write
-
-    /**
-     * Template Location.  This is the location which templates will be read from.  The generator
-     * will use the resource stream to attempt to read the templates.
-     */
+    modelTemplateFiles.put("model.mustache", ".hx");
+    apiTemplateFiles.put("api.mustache", ".hx");
     templateDir = "haxe-client-codegen";
-
-    /**
-     * Api Package.  Optional, if needed, this can be used in templates
-     */
     apiPackage = "org.openapitools.api";
-
-    /**
-     * Model Package.  Optional, if needed, this can be used in templates
-     */
     modelPackage = "org.openapitools.model";
-
-    /**
-     * Reserved words.  Override this with reserved words specific to your language
-     */
     reservedWords = new HashSet<String> (
       Arrays.asList(
-        "sample1",  // replace with static values
-        "sample2")
+        "package", "import", "haxe", "class", "for", "in", "public", "var", "private", "abstract",
+        "Array", "Dynamic", "Int", "Bool", "String", "Float", "if", "else", "throw", "catch",
+        "new", "function", "static", "null", "cast", "Reflect", "return", "void", "new", "new",
+        "enum", "to", "from", "while", "continue", "break", "true", "false", "Any", "Std",
+        "override"
+      )
     );
-
-    /**
-     * Additional Properties.  These values can be passed to the templates and
-     * are available in models, apis, and supporting files
-     */
     additionalProperties.put("apiVersion", apiVersion);
 
-    /**
-     * Supporting Files.  You can write single files for the generator with the
-     * entire object tree available.  If the input file has a suffix of `.mustache
-     * it will be processed by the template engine.  Otherwise, it will be copied
-     */
-    supportingFiles.add(new SupportingFile("myFile.mustache",   // the input template or file
-      "",                                                       // the destination folder, relative `outputFolder`
-      "myFile.sample")                                          // the output file
-    );
+    // supportingFiles.add(new SupportingFile("myFile.mustache", "", "myFile.sample"));
 
-    /**
-     * Language Specific Primitives.  These types will not trigger imports by
-     * the client generator
-     */
     languageSpecificPrimitives = new HashSet<String>(
-      Arrays.asList(
-        "String",
-        "Bool",
-        "Null",
-        "Int",
-        "Float")
-    );
-  }
+      Arrays.asList("String", "Bool", "Null", "Int", "Float", "Dynamic", "Any"));
 
-  /**
-   * Escapes a reserved word as defined in the `reservedWords` array. Handle escaping
-   * those terms here.  This logic is only called if a variable matches the reserved words
-   * 
-   * @return the escaped term
-   */
+      typeMapping.clear();
+      typeMapping.put("array", "Array");
+      typeMapping.put("map", "Map");
+      typeMapping.put("List", "Array");
+      typeMapping.put("boolean", "Bool");
+      typeMapping.put("string", "String");
+      typeMapping.put("int", "Integer");
+      typeMapping.put("float", "Float");
+      typeMapping.put("number", "Integer");
+      typeMapping.put("DateTime", "Date");
+      typeMapping.put("long", "Integer");
+      typeMapping.put("short", "Integer");
+      typeMapping.put("char", "String");
+      typeMapping.put("double", "Float");
+      typeMapping.put("object", "Dynamic");  // Not sure about this
+      typeMapping.put("integer", "Integer");
+      typeMapping.put("ByteArray", "Bytes");  // Not sure about this
+      typeMapping.put("binary", "Bytes");
+      typeMapping.put("file", "File");  // TODO: fix
+      typeMapping.put("UUID", "String");
+      typeMapping.put("URI", "String");
+      typeMapping.put("BigDecimal", "Float");  // Not sure about this
+  }
   @Override
   public String escapeReservedWord(String name) {
     return "_" + name;  // add an underscore to the name
   }
 
-  /**
-   * Location to write model files.  You can use the modelPackage() as defined when the class is
-   * instantiated
-   */
   public String modelFileFolder() {
     return outputFolder + "/" + sourceFolder + "/" + modelPackage().replace('.', File.separatorChar);
   }
 
-  /**
-   * Location to write api files.  You can use the apiPackage() as defined when the class is
-   * instantiated
-   */
   @Override
   public String apiFileFolder() {
     return outputFolder + "/" + sourceFolder + "/" + apiPackage().replace('.', File.separatorChar);
   }
 
-  /**
-   * override with any special text escaping logic to handle unsafe
-   * characters so as to avoid code injection
-   *
-   * @param input String to be cleaned up
-   * @return string with unsafe characters removed or escaped
-   */
   @Override
   public String escapeUnsafeCharacters(String input) {
-    //TODO: check that this logic is safe to escape unsafe characters to avoid code injection
     return input;
   }
 
-  /**
-   * Escape single and/or double quote to avoid code injection
-   *
-   * @param input String to be cleaned up
-   * @return string with quotation mark removed or escaped
-   */
   public String escapeQuotationMark(String input) {
-    //TODO: check that this logic is safe to escape quotation mark to avoid code injection
     return input.replace("\"", "\\\"");
   }
 }
