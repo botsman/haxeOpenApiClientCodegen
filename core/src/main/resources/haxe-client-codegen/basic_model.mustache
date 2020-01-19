@@ -1,0 +1,54 @@
+class {{classname}} {
+    {{#models}}
+    {{#model}}
+    {{#allVars}}
+    var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}}{{#required}}{{#defaultValue}} = {{defaultValue}}{{/defaultValue}}{{/required}}{{^required}} = {{#defaultValue}}{{{defaultValue}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}};  {{! defaultValue setting needs to be fixed}}
+    {{/allVars}}
+    {{/model}}
+    {{/models}}
+
+    public function new(
+        {{#models}}
+        {{#model}}
+        {{#allVars}}
+        {{^required}}?{{/required}}{{name}}: {{dataType}}{{#hasMore}},{{/hasMore}}
+        {{/allVars}}
+        {{/model}}
+        {{/models}}
+    ) {
+        {{#models}}
+        {{#model}}
+        {{#allVars}}
+        this.{{name}} = {{name}};
+        {{/allVars}}
+        {{/model}}
+        {{/models}}
+    }
+
+    public function validate(): Void {
+        // you can do your custom validation here
+    }
+
+    public static function fromDynamic(data: Dynamic): {{classname}} {
+        var obj = new {{classname}}(
+            {{#models}}
+            {{#model}}
+            {{#allVars}}
+            {{#required}}data.{{name}}{{/required}}{{^required}}Reflect.field(data, "{{classname}}"){{/required}}{{#hasMore}},{{/hasMore}}
+            {{/allVars}}
+            {{/model}}
+            {{/models}}
+        );
+        obj.validate();
+        return obj;
+    }
+
+    public function toDynamic(): Dynamic {
+        var data = {};
+        return data;
+    }
+
+    public function toString(): String {
+        return haxe.Json.stringify(this.toDynamic());
+    }
+}

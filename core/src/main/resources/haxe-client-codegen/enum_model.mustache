@@ -1,0 +1,8 @@
+{{! Maybe I will need to handle a case for model field enums (abstact enums) and normal enums }}
+enum {{classname}} {
+    {{#allowableValues}}
+    {{#values}}
+    {{this}};
+    {{/values}}
+    {{/allowableValues}}
+}

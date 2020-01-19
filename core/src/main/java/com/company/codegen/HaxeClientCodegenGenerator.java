@@ -89,7 +89,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
     // supportingFiles.add(new SupportingFile("myFile.mustache", "", "myFile.sample"));
 
     languageSpecificPrimitives = new HashSet<String>(
-      Arrays.asList("String", "Bool", "Null", "Int", "Float", "Dynamic", "Any"));
+      Arrays.asList("String", "Bool", "Null", "Int", "Float", "Dynamic", "Any"));  // Not sure about Dynamic and Any
 
       typeMapping.clear();
       typeMapping.put("array", "Array");
@@ -97,16 +97,16 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
       typeMapping.put("List", "Array");
       typeMapping.put("boolean", "Bool");
       typeMapping.put("string", "String");
-      typeMapping.put("int", "Integer");
+      typeMapping.put("int", "Int");
       typeMapping.put("float", "Float");
-      typeMapping.put("number", "Integer");
+      typeMapping.put("number", "Int");
       typeMapping.put("DateTime", "Date");
-      typeMapping.put("long", "Integer");
-      typeMapping.put("short", "Integer");
+      typeMapping.put("long", "Int");
+      typeMapping.put("short", "Int");
       typeMapping.put("char", "String");
       typeMapping.put("double", "Float");
-      typeMapping.put("object", "Dynamic");  // Not sure about this
-      typeMapping.put("integer", "Integer");
+      typeMapping.put("object", "Dynamic");
+      typeMapping.put("integer", "Int");
       typeMapping.put("ByteArray", "Bytes");  // Not sure about this
       typeMapping.put("binary", "Bytes");
       typeMapping.put("file", "File");  // TODO: fix

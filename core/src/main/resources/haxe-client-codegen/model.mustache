@@ -1,1 +1,1 @@
-# This is a sample model mustache template.
+{{#models}}{{#model}}{{#isEnum}}{{>enum_model}}{{/isEnum}}{{^isEnum}}{{>basic_model}}{{/isEnum}}{{/model}}{{/models}}
