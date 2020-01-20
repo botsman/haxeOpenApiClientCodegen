@@ -1,54 +1,55 @@
 class {{classname}} {
+  {{#models}}
+  {{#model}}
+  {{#allVars}}
+  var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}};
+  {{/allVars}}
+  {{/model}}
+  {{/models}}
+
+  public function new({{#models}}{{#model}}{{#allVars}}{{^required}}?{{/required}}{{name}}: {{dataType}}{{#hasMore}}, {{/hasMore}}{{/allVars}}{{/model}}{{/models}}) {
     {{#models}}
     {{#model}}
     {{#allVars}}
-    var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}}{{#required}}{{#defaultValue}} = {{defaultValue}}{{/defaultValue}}{{/required}}{{^required}} = {{#defaultValue}}{{{defaultValue}}}{{/defaultValue}}{{^defaultValue}}null{{/defaultValue}}{{/required}};  {{! defaultValue setting needs to be fixed}}
+    this.{{name}} = {{name}};
     {{/allVars}}
     {{/model}}
     {{/models}}
+  }
 
-    public function new(
-        {{#models}}
-        {{#model}}
-        {{#allVars}}
-        {{^required}}?{{/required}}{{name}}: {{dataType}}{{#hasMore}},{{/hasMore}}
-        {{/allVars}}
-        {{/model}}
-        {{/models}}
-    ) {
-        {{#models}}
-        {{#model}}
-        {{#allVars}}
-        this.{{name}} = {{name}};
-        {{/allVars}}
-        {{/model}}
-        {{/models}}
-    }
+  public function validate(): Void {
+    // you can do your custom validation here
+  }
 
-    public function validate(): Void {
-        // you can do your custom validation here
+  public static function fromDynamic(data: Dynamic): Null<{{classname}}> {
+    if (data == null) {
+      return null;
     }
+    {{#models}}
+    {{#model}}
+    {{#allVars}}
+    var {{name}}: {{dataType}} = {{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}{{#required}}data.{{name}}{{/required}}{{^required}}Reflect.field(data, "{{name}}"){{/required}}{{^isPrimitiveType}}){{/isPrimitiveType}};
+    {{/allVars}}
+    {{/model}}
+    {{/models}}
+    var obj = new {{classname}}({{#models}}{{#model}}{{#allVars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/allVars}}{{/model}}{{/models}});
+    obj.validate();
+    return obj;
+  }
 
-    public static function fromDynamic(data: Dynamic): {{classname}} {
-        var obj = new {{classname}}(
-            {{#models}}
-            {{#model}}
-            {{#allVars}}
-            {{#required}}data.{{name}}{{/required}}{{^required}}Reflect.field(data, "{{classname}}"){{/required}}{{#hasMore}},{{/hasMore}}
-            {{/allVars}}
-            {{/model}}
-            {{/models}}
-        );
-        obj.validate();
-        return obj;
-    }
+  public function toDynamic(): Dynamic {
+    return {
+      {{#models}}
+      {{#model}}
+      {{#allVars}}
+      {{name}}: {{^required}}if (this.{{name}} != null) {{/required}}{{#isPrimitiveType}}this.{{name}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.toDynamic(){{/isPrimitiveType}}{{^required}} else null{{/required}}{{#hasMore}},{{/hasMore}}
+      {{/allVars}}
+      {{/model}}
+      {{/models}}
+    };
+  }
 
-    public function toDynamic(): Dynamic {
-        var data = {};
-        return data;
-    }
-
-    public function toString(): String {
-        return haxe.Json.stringify(this.toDynamic());
-    }
+  public function toString(): String {
+    return haxe.Json.stringify(this.toDynamic());
+  }
 }
