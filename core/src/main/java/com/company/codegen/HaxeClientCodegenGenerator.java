@@ -89,7 +89,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
     // supportingFiles.add(new SupportingFile("myFile.mustache", "", "myFile.sample"));
 
     languageSpecificPrimitives = new HashSet<String>(
-      Arrays.asList("String", "Bool", "Null", "Int", "Float", "Dynamic", "Any"));  // Not sure about Dynamic and Any
+      Arrays.asList("string", "char", "boolean", "null", "integer", "int", "float", "long", "short", "array", "map", "List", "number", "double", "UUID", "URI", "BigDecimal"));
 
       typeMapping.clear();
       typeMapping.put("array", "Array");
