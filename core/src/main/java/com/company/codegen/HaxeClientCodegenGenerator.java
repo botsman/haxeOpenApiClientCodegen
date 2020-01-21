@@ -32,6 +32,12 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
     return "haxe-client-codegen";
   }
 
+  @Override
+  public Map<String, Object> postProcessModels(Map<String, Object> objs) {
+    // process enum in models
+    return postProcessModelsEnum(objs);
+  }
+
   /**
    * Provides an opportunity to inspect and modify operation data before the code is generated.
    */

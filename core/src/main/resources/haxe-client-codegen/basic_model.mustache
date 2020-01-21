@@ -2,7 +2,7 @@ class {{classname}} {
   {{#models}}
   {{#model}}
   {{#allVars}}
-  var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}};
+  public var {{name}}(default, set): {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}};
   {{/allVars}}
   {{/model}}
   {{/models}}
@@ -17,6 +17,17 @@ class {{classname}} {
     {{/models}}
   }
 
+  {{#models}}
+  {{#model}}
+  {{#allVars}}
+  public function set_{{name}}(value) {
+    {{! add validation here }}
+    return {{name}} = value;
+  }
+  {{/allVars}}
+  {{/model}}
+  {{/models}}
+
   public function validate(): Void {
     // you can do your custom validation here
   }
@@ -28,7 +39,17 @@ class {{classname}} {
     {{#models}}
     {{#model}}
     {{#allVars}}
-    var {{name}}: {{dataType}} = {{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}{{#required}}data.{{name}}{{/required}}{{^required}}Reflect.field(data, "{{name}}"){{/required}}{{^isPrimitiveType}}){{/isPrimitiveType}};
+    {{#isListContainer}}
+    var {{name}}: Array<{{#items}}{{dataType}}{{/items}}> = [];
+    if (Reflect.field(data, "{{name}}") != null) {
+      for (item in cast(data.{{name}}, Array<Dynamic>)) {
+        {{name}}.push({{#items}}{{#isPrimitiveType}}cast(item, {{dataType}}){{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic(item){{/isPrimitiveType}}{{/items}});
+      }
+    }
+    {{/isListContainer}}
+    {{^isListContainer}}
+    var {{name}}: {{dataType}} = {{#isPrimitiveType}}cast({{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}{{#required}}data.{{name}}{{/required}}{{^required}}Reflect.field(data, "{{name}}"){{/required}}{{#isPrimitiveType}}, {{^isEnum}}{{dataType}}{{/isEnum}}{{#isEnum}}{{nameInCamelCase}}{{/isEnum}}{{/isPrimitiveType}});
+    {{/isListContainer}}
     {{/allVars}}
     {{/model}}
     {{/models}}
@@ -42,7 +63,7 @@ class {{classname}} {
       {{#models}}
       {{#model}}
       {{#allVars}}
-      {{name}}: {{^required}}if (this.{{name}} != null) {{/required}}{{#isPrimitiveType}}this.{{name}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.toDynamic(){{/isPrimitiveType}}{{^required}} else null{{/required}}{{#hasMore}},{{/hasMore}}
+      {{name}}: {{^required}}if (Reflect.hasField(this, "{{name}}")) {{/required}}{{#isPrimitiveType}}this.{{name}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.toDynamic(){{/isPrimitiveType}}{{^required}} else null{{/required}}{{#hasMore}},{{/hasMore}}
       {{/allVars}}
       {{/model}}
       {{/models}}
@@ -53,3 +74,21 @@ class {{classname}} {
     return haxe.Json.stringify(this.toDynamic());
   }
 }
+
+
+{{! Saving inline enums into the same file, because otherwise there might be a name collisions }}
+{{#models}}
+{{#model}}
+{{#allVars}}
+{{#isEnum}}
+enum abstract {{nameInCamelCase}}({{dataType}}) to {{dataType}} from {{dataType}} {
+  {{#allowableValues}}
+  {{#enumVars}}
+  var {{name}} = {{{value}}};
+  {{/enumVars}}
+  {{/allowableValues}}
+}
+{{/isEnum}}
+{{/allVars}}
+{{/model}}
+{{/models}}
