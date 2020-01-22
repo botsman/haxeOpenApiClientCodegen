@@ -22,6 +22,17 @@ class {{classname}} {
   {{#allVars}}
   public function set_{{name}}(value) {
     {{! add validation here }}
+    {{#hasValidation}}
+    {{#max}}{{max}}{{/max}}
+    {{#maximum}}{{maximum}}{{/maximum}}
+    {{#maxItems}}{{maxItems}}{{/maxItems}}
+    {{#maxLength}}{{maxLength}}{{/maxLength}}
+    {{#min}}{{min}}{{/min}}
+    {{#minimum}}{{minimum}}{{/minimum}}
+    {{#minItems}}{{minItems}}{{/minItems}}
+    {{#minLength}}{{minLength}}{{/minLength}}
+    {{#pattern}}{{pattern}}{{/pattern}}
+    {{/hasValidation}}
     return {{name}} = value;
   }
   {{/allVars}}
