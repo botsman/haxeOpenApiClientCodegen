@@ -20,25 +20,52 @@ class {{classname}} {
   {{#models}}
   {{#model}}
   {{#allVars}}
-  public function set_{{name}}(value) {
+  public function set_{{name}}(value: {{dataType}}) {
     {{! add validation here }}
     {{#hasValidation}}
-    {{#max}}{{max}}{{/max}}
-    {{#maximum}}{{maximum}}{{/maximum}}
-    {{#maxItems}}{{maxItems}}{{/maxItems}}
-    {{#maxLength}}{{maxLength}}{{/maxLength}}
-    {{#min}}{{min}}{{/min}}
-    {{#minimum}}{{minimum}}{{/minimum}}
-    {{#minItems}}{{minItems}}{{/minItems}}
-    {{#minLength}}{{minLength}}{{/minLength}}
-    {{#pattern}}{{pattern}}{{/pattern}}
+    {{#maximum}}
+    if (value > {{maximum}}) {
+      throw "Value cannot be more than ${{{maximum}}}";
+    }
+    {{/maximum}}
+    {{#maxItems}}
+    if (value.length > {{maxItems}}) {
+      throw "Value cannot contain more than {{maxItems}} elements";
+    }
+    {{/maxItems}}
+    {{#maxLength}}
+    if (value.length > {{maxLength}}) {
+      throw "Value cannot be longer than {{maxLength}}";  {{!fix escaping}}
+    }
+    {{/maxLength}}
+    {{#minimum}}
+    if (value < {{minimum}}) {
+      throw "Value cannot be less than {{minimum}}";
+    }
+    {{/minimum}}
+    {{#minItems}}
+    if (value.length > {{minItems}}) {
+      throw "Value cannot contain less than {{minItems}} elements";
+    }
+    {{/minItems}}
+    {{#minLength}}
+    if (value.length < {{minLength}}) {
+      throw "Value cannot be shorter than {{minLength}}";
+    }
+    {{/minLength}}
+    {{#pattern}}
+    var pattern = {{pattern}};  {{!check this}}
+    if (!pattern.match(value)) {
+      throw "${value} does not match pattern: {{pattern}}"
+    }
+    {{/pattern}}
     {{/hasValidation}}
     return {{name}} = value;
   }
+
   {{/allVars}}
   {{/model}}
   {{/models}}
-
   public function validate(): Void {
     // you can do your custom validation here
   }
