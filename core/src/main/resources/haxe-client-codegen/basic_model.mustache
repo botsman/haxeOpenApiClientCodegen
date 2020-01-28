@@ -2,12 +2,13 @@ class {{classname}} {
   {{#models}}
   {{#model}}
   {{#allVars}}
-  public var {{name}}(default, set): {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}};
+  public var {{name}}(default, set): {{^required}}Null<{{/required}}{{dataType}}{{#isListContainer}}<{{#items}}{{dataType}}{{/items}}>{{/isListContainer}}{{^required}}>{{/required}};
   {{/allVars}}
   {{/model}}
   {{/models}}
 
-  public function new({{#models}}{{#model}}{{#allVars}}{{^required}}?{{/required}}{{name}}: {{dataType}}{{#hasMore}}, {{/hasMore}}{{/allVars}}{{/model}}{{/models}}) {
+
+  public function new({{#models}}{{#model}}{{#requiredVars}}{{name}}: {{dataType}}{{#isListContainer}}<{{#items}}{{dataType}}{{/items}}>{{/isListContainer}}{{#hasMore}}, {{/hasMore}}{{/requiredVars}}{{#hasRequired}}{{#hasOptional}}, {{/hasOptional}}{{/hasRequired}}{{#optionalVars}}?{{name}}: {{dataType}}{{#isListContainer}}<{{#items}}{{dataType}}{{/items}}>{{/isListContainer}}{{#hasMore}}, {{/hasMore}}{{/optionalVars}}{{/model}}{{/models}}) {
     {{#models}}
     {{#model}}
     {{#allVars}}
@@ -20,8 +21,7 @@ class {{classname}} {
   {{#models}}
   {{#model}}
   {{#allVars}}
-  public function set_{{name}}(value: {{dataType}}) {
-    {{! add validation here }}
+  public function set_{{name}}(value: {{dataType}}{{#isListContainer}}<{{#items}}{{dataType}}{{/items}}>{{/isListContainer}}) {
     {{#hasValidation}}
     {{#maximum}}
     if (value > {{maximum}}) {
@@ -35,7 +35,7 @@ class {{classname}} {
     {{/maxItems}}
     {{#maxLength}}
     if (value.length > {{maxLength}}) {
-      throw "Value cannot be longer than {{maxLength}}";  {{!fix escaping}}
+      throw "Value cannot be longer than {{maxLength}}";
     }
     {{/maxLength}}
     {{#minimum}}
@@ -54,9 +54,9 @@ class {{classname}} {
     }
     {{/minLength}}
     {{#pattern}}
-    var pattern = {{pattern}};  {{!check this}}
+    var pattern = ~{{pattern}};
     if (!pattern.match(value)) {
-      throw "${value} does not match pattern: {{pattern}}"
+      throw "${value} does not match pattern: {{pattern}}";  {{!fix escaping and single quotes}}
     }
     {{/pattern}}
     {{/hasValidation}}
@@ -91,7 +91,7 @@ class {{classname}} {
     {{/allVars}}
     {{/model}}
     {{/models}}
-    var obj = new {{classname}}({{#models}}{{#model}}{{#allVars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/allVars}}{{/model}}{{/models}});
+    var obj: {{classname}} = new {{classname}}({{#models}}{{#model}}{{#requiredVars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/requiredVars}}{{#hasRequired}}{{#hasOptional}}, {{/hasOptional}}{{/hasRequired}}{{#optionalVars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/optionalVars}}{{/model}}{{/models}});
     obj.validate();
     return obj;
   }
@@ -101,7 +101,7 @@ class {{classname}} {
       {{#models}}
       {{#model}}
       {{#allVars}}
-      {{name}}: {{^required}}if (Reflect.hasField(this, "{{name}}")) {{/required}}{{#isPrimitiveType}}this.{{name}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.toDynamic(){{/isPrimitiveType}}{{^required}} else null{{/required}}{{#hasMore}},{{/hasMore}}
+      {{name}}: {{^required}}if (Reflect.hasField(this, "{{name}}")) {{/required}}{{#isListContainer}}[for (item in this.{{name}}) {{#items}}item{{^isPrimitiveType}}.toDynamic(){{/isPrimitiveType}}{{/items}}]{{/isListContainer}}{{^isListContainer}}this.{{name}}{{^isPrimitiveType}}.toDynamic(){{/isPrimitiveType}}{{/isListContainer}}{{^required}} else null{{/required}}{{#hasMore}},{{/hasMore}}
       {{/allVars}}
       {{/model}}
       {{/models}}
