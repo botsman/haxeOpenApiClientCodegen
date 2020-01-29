@@ -70,10 +70,7 @@ class {{classname}} {
     // you can do your custom validation here
   }
 
-  public static function fromDynamic(data: Dynamic): Null<{{classname}}> {
-    if (data == null) {
-      return null;
-    }
+  public static function fromDynamic(data: Dynamic): {{classname}} {
     {{#models}}
     {{#model}}
     {{#allVars}}
@@ -86,7 +83,7 @@ class {{classname}} {
     }
     {{/isListContainer}}
     {{^isListContainer}}
-    var {{name}}: {{dataType}} = {{#isPrimitiveType}}cast({{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}{{#required}}data.{{name}}{{/required}}{{^required}}Reflect.field(data, "{{name}}"){{/required}}{{#isPrimitiveType}}, {{^isEnum}}{{dataType}}{{/isEnum}}{{#isEnum}}{{nameInCamelCase}}{{/isEnum}}{{/isPrimitiveType}});
+    var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}} = {{^required}}if (Reflect.hasField(data, "{{name}}")) {{/required}}{{#isPrimitiveType}}cast({{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}data.{{name}}{{#isPrimitiveType}}, {{^isEnum}}{{dataType}}{{/isEnum}}{{#isEnum}}{{nameInCamelCase}}{{/isEnum}}{{/isPrimitiveType}}){{^required}} else null {{/required}};
     {{/isListContainer}}
     {{/allVars}}
     {{/model}}
