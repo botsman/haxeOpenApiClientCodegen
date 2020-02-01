@@ -76,14 +76,14 @@ class {{classname}} {
     {{#allVars}}
     {{#isListContainer}}
     var {{name}}: Array<{{#items}}{{dataType}}{{/items}}> = [];
-    if (Reflect.field(data, "{{name}}") != null) {
+    if (Reflect.getProperty(data, "{{name}}") != null) {
       for (item in cast(data.{{name}}, Array<Dynamic>)) {
         {{name}}.push({{#items}}{{#isPrimitiveType}}cast(item, {{dataType}}){{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic(item){{/isPrimitiveType}}{{/items}});
       }
     }
     {{/isListContainer}}
     {{^isListContainer}}
-    var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}} = {{^required}}if (Reflect.hasField(data, "{{name}}")) {{/required}}{{#isPrimitiveType}}cast({{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}data.{{name}}{{#isPrimitiveType}}, {{^isEnum}}{{dataType}}{{/isEnum}}{{#isEnum}}{{nameInCamelCase}}{{/isEnum}}{{/isPrimitiveType}}){{^required}} else null {{/required}};
+    var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}} = {{^required}}if (Reflect.getProperty(data, "{{name}}") != null) {{/required}}{{#isPrimitiveType}}cast({{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}data.{{name}}{{#isPrimitiveType}}, {{^isEnum}}{{dataType}}{{/isEnum}}{{#isEnum}}{{nameInCamelCase}}{{/isEnum}}{{/isPrimitiveType}}){{^required}} else null {{/required}};
     {{/isListContainer}}
     {{/allVars}}
     {{/model}}
@@ -98,7 +98,7 @@ class {{classname}} {
       {{#models}}
       {{#model}}
       {{#allVars}}
-      {{name}}: {{^required}}if (Reflect.hasField(this, "{{name}}")) {{/required}}{{#isListContainer}}[for (item in this.{{name}}) {{#items}}item{{^isPrimitiveType}}.toDynamic(){{/isPrimitiveType}}{{/items}}]{{/isListContainer}}{{^isListContainer}}this.{{name}}{{^isPrimitiveType}}.toDynamic(){{/isPrimitiveType}}{{/isListContainer}}{{^required}} else null{{/required}}{{#hasMore}},{{/hasMore}}
+      {{name}}: {{^required}}if (Reflect.getProperty(this, "{{name}}") != null) {{/required}}{{#isListContainer}}[for (item in this.{{name}}) {{#items}}item{{^isPrimitiveType}}.toDynamic(){{/isPrimitiveType}}{{/items}}]{{/isListContainer}}{{^isListContainer}}this.{{name}}{{^isPrimitiveType}}.toDynamic(){{/isPrimitiveType}}{{/isListContainer}}{{^required}} else null{{/required}}{{#hasMore}},{{/hasMore}}
       {{/allVars}}
       {{/model}}
       {{/models}}
