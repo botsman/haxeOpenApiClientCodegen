@@ -1,8 +1,19 @@
-{{! Not sure yet if I should use native enums or abstact enums }}
-enum {{classname}} {
-    {{#allowableValues}}
-    {{#values}}
-    {{this}};
-    {{/values}}
-    {{/allowableValues}}
+enum abstract {{classname}}(String) from String to String {  {{!probably should use underlying type instead of String}}
+  {{#allowableValues}}
+  {{#values}}
+  var {{this}} = "{{this}}";  {{! check handling Int enums}}
+  {{/values}}
+  {{/allowableValues}}
+
+  public static function fromDynamic(d: Dynamic): {{classname}} {
+    return cast(d, {{classname}});
+  }
+
+  public function toDynamic(): Dynamic {
+    return this;  {{! not sure if this is a good way}}
+  }
+
+  public function toString(): String {
+    return this;
+  }
 }

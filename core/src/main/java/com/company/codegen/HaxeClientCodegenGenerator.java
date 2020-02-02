@@ -106,7 +106,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
       typeMapping.put("int", "Int");
       typeMapping.put("float", "Float");
       typeMapping.put("number", "Int");
-      typeMapping.put("DateTime", "Date");
+      typeMapping.put("DateTime", "String");
       typeMapping.put("long", "Int");
       typeMapping.put("short", "Int");
       typeMapping.put("char", "String");
