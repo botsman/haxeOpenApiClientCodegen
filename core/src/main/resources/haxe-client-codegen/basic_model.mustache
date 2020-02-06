@@ -76,14 +76,14 @@ class {{classname}} {
     {{#allVars}}
     {{#isListContainer}}
     var {{name}}: Array<{{#items}}{{dataType}}{{/items}}> = [];
-    if (Reflect.getProperty(data, "{{name}}") != null) {
+    if (Reflect.field(data, "{{name}}") != null) {
       for (item in cast(data.{{name}}, Array<Dynamic>)) {
         {{name}}.push({{#items}}{{#isPrimitiveType}}cast(item, {{dataType}}){{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic(item){{/isPrimitiveType}}{{/items}});
       }
     }
     {{/isListContainer}}
     {{^isListContainer}}
-    var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}} = {{^required}}if (Reflect.getProperty(data, "{{name}}") != null) {{/required}}{{#isPrimitiveType}}cast({{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}data.{{name}}{{#isPrimitiveType}}, {{^isEnum}}{{dataType}}{{/isEnum}}{{#isEnum}}{{nameInCamelCase}}{{/isEnum}}{{/isPrimitiveType}}){{^required}} else null {{/required}};
+    var {{name}}: {{^required}}Null<{{/required}}{{dataType}}{{^required}}>{{/required}} = {{^required}}if (Reflect.field(data, "{{name}}") != null) {{/required}}{{#isPrimitiveType}}cast({{/isPrimitiveType}}{{^isPrimitiveType}}{{dataType}}.fromDynamic({{/isPrimitiveType}}data.{{name}}{{#isPrimitiveType}}, {{^isEnum}}{{dataType}}{{/isEnum}}{{#isEnum}}{{nameInCamelCase}}{{/isEnum}}{{/isPrimitiveType}}){{^required}} else null {{/required}};
     {{/isListContainer}}
     {{/allVars}}
     {{/model}}
