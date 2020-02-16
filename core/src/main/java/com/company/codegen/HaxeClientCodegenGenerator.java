@@ -34,7 +34,13 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
 
   @Override
   public Map<String, Object> postProcessModels(Map<String, Object> objs) {
-    // process enum in models
+    List<Object> models = (List<Object>) objs.get("models");
+    for (Object _mo : models) {
+        Map<String, Object> mo = (Map<String, Object>) _mo;
+        CodegenModel cm = (CodegenModel) mo.get("model");
+        // Set appropriate dataType
+        cm.setDataType(typeMapping.get(cm.getDataType()));
+    }
     return postProcessModelsEnum(objs);
   }
 

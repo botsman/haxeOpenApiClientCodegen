@@ -1,7 +1,7 @@
-enum abstract {{classname}}(String) from String to String {  {{!probably should use underlying type instead of String}}
+enum abstract {{classname}}({{dataType}}) from {{dataType}} to {{dataType}} {
   {{#allowableValues}}
   {{#values}}
-  var {{this}} = "{{this}}";  {{! check handling Int enums}}
+  var {{this}} = {{#isString}}"{{/isString}}{{this}}{{#isString}}"{{/isString}};
   {{/values}}
   {{/allowableValues}}
 
