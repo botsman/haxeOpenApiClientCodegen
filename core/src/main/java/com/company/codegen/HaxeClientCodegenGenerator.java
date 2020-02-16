@@ -98,7 +98,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
     );
     additionalProperties.put("apiVersion", apiVersion);
 
-    // supportingFiles.add(new SupportingFile("myFile.mustache", "", "myFile.sample"));
+    supportingFiles.add(new SupportingFile("ApiClient.mustache", "src", "ApiClient.hx"));
 
     languageSpecificPrimitives = new HashSet<String>(
       Arrays.asList("string", "char", "boolean", "null", "integer", "int", "float", "long", "short", "List", "number", "double", "UUID", "URI", "BigDecimal", "DateTime"));
