@@ -1,16 +1,19 @@
 package com.company.codegen;
 
 import org.openapitools.codegen.*;
-import io.swagger.models.properties.*;
+import io.swagger.v3.oas.models.OpenAPI;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.io.File;
 
-public class HaxeClientCodegenGenerator extends DefaultCodegen implements CodegenConfig {
+public class HaxeClientCodegenGenerator extends DefaultCodegen {
 
   // source folder where to write the files
-  protected String sourceFolder = "src";
+  protected String sourceFolder = "myProject";
   protected String apiVersion = "1.0.0";
+  public final String PROJECT_NAME = "projectName";
+  protected String projectName;
 
   /**
    * Configures the type of generator.
@@ -98,7 +101,7 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
     );
     additionalProperties.put("apiVersion", apiVersion);
 
-    supportingFiles.add(new SupportingFile("ApiClient.mustache", "src", "ApiClient.hx"));
+    supportingFiles.add(new SupportingFile("ApiClient.mustache", sourceFolder, "ApiClient.hx"));
 
     languageSpecificPrimitives = new HashSet<String>(
       Arrays.asList("string", "char", "boolean", "null", "integer", "int", "float", "long", "short", "List", "number", "double", "UUID", "URI", "BigDecimal", "DateTime"));
@@ -125,6 +128,9 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
       typeMapping.put("UUID", "String");
       typeMapping.put("URI", "String");
       typeMapping.put("BigDecimal", "Float");  // Not sure about this
+
+      cliOptions.add(new CliOption(PROJECT_NAME,
+                "name of the project (Default: myProject)"));
   }
   @Override
   public String escapeReservedWord(String name) {
@@ -147,5 +153,29 @@ public class HaxeClientCodegenGenerator extends DefaultCodegen implements Codege
 
   public String escapeQuotationMark(String input) {
     return input.replace("\"", "\\\"");
+  }
+
+  @Override
+  public void processOpts() {
+    super.processOpts();
+
+    if (additionalProperties.containsKey(PROJECT_NAME)) {
+      setProjectName(((String) additionalProperties.get(PROJECT_NAME)));
+    }
+  }
+
+  @Override
+  public void preprocessOpenAPI(OpenAPI openAPI) {
+    super.preprocessOpenAPI(openAPI);
+
+    if (StringUtils.isBlank(projectName)) {
+      projectName = "haxeClient";
+    }
+
+    additionalProperties.put(PROJECT_NAME, projectName);
+  }
+
+  public void setProjectName(String projectName) {
+    this.projectName = projectName;
   }
 }
